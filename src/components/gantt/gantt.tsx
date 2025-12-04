@@ -108,8 +108,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
   const svgWidth = dateSetup.dates.length * columnWidth;
 
-  const uniqueRowCount = new Set(barTasks.map(b => b.index)).size;
-  const rowCount = rowCountOverride ?? uniqueRowCount;
+  const uniqueRowCount = new Set(barTasks.map(b => b.name)).size;
+  const rowCount = uniqueRowCount;
   const ganttFullHeight = rowCount * rowHeight;
 
 

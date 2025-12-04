@@ -2435,9 +2435,9 @@ var Gantt = function Gantt(_ref) {
 
   var svgWidth = dateSetup.dates.length * columnWidth;
   var uniqueRowCount = new Set(barTasks.map(function (b) {
-    return b.index;
+    return b.name;
   })).size;
-  var rowCount = rowCountOverride != null ? rowCountOverride : uniqueRowCount;
+  var rowCount = uniqueRowCount;
   var ganttFullHeight = rowCount * rowHeight;
 
   var _useState10 = useState(0),
