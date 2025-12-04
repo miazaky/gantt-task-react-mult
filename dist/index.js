@@ -2517,7 +2517,18 @@ var Gantt = function Gantt(_ref) {
         y: newY
       });
     });
-    setBarTasks(groupedBars);
+    var collapsedBars = Object.values(groupedBars.reduce(function (acc, bar) {
+      var _bar$name2;
+
+      var key = ((_bar$name2 = bar.name) != null ? _bar$name2 : "").trim().toLowerCase();
+
+      if (!acc[key]) {
+        acc[key] = bar;
+      }
+
+      return acc;
+    }, {}));
+    setBarTasks(collapsedBars);
   }, [tasks, rowCountOverride, viewMode, preStepsCount, rowHeight, barCornerRadius, columnWidth, taskHeight, handleWidth, barProgressColor, barProgressSelectedColor, barBackgroundColor, barBackgroundSelectedColor, projectProgressColor, projectProgressSelectedColor, projectBackgroundColor, projectBackgroundSelectedColor, milestoneBackgroundColor, milestoneBackgroundSelectedColor, rtl, scrollX, onExpanderClick]);
   React.useEffect(function () {
     if (viewMode === dateSetup.viewMode && (viewDate && !currentViewDate || viewDate && (currentViewDate === null || currentViewDate === void 0 ? void 0 : currentViewDate.valueOf()) !== viewDate.valueOf())) {

@@ -180,7 +180,17 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       };
     });
 
-    setBarTasks(groupedBars);
+    const collapsedBars: BarTask[] = Object.values(
+      groupedBars.reduce<Record<string, BarTask>>((acc, bar) => {
+        const key = (bar.name ?? "").trim().toLowerCase();
+        if (!acc[key]) {
+          acc[key] = bar;
+        }
+        return acc;
+      }, {})
+    );
+
+    setBarTasks(collapsedBars);
   }, [
     tasks,
     rowCountOverride,
