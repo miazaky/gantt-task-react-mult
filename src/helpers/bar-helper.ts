@@ -38,7 +38,7 @@ export const convertToBarTasks = (
 
     return convertToBarTask(
       t,
-      rowIndex,   // 👈 IMPORTANT: rowIndex instead of `i`
+      rowIndex,
       dates,
       columnWidth,
       rowHeight,
@@ -59,7 +59,6 @@ export const convertToBarTasks = (
     );
   });
 
-  // set dependencies
   barTasks = barTasks.map(task => {
     const dependencies = task.dependencies || [];
     for (let j = 0; j < dependencies.length; j++) {
