@@ -2823,6 +2823,19 @@ var Gantt = function Gantt(_ref) {
     onScroll: handleScrollX
   }));
 };
+function debugNormalizedNames(barTasks) {
+  var normalized = barTasks.map(function (t) {
+    return t.name.trim().toLowerCase();
+  });
+  var unique = Array.from(new Set(normalized));
+  console.log("RAW names:", barTasks.map(function (t) {
+    return t.name;
+  }));
+  console.log("Normalized:", normalized);
+  console.log("Unique normalized:", unique);
+  console.log("Count:", unique.length);
+  return unique;
+}
 
-export { Gantt, ViewMode };
+export { Gantt, ViewMode, debugNormalizedNames };
 //# sourceMappingURL=index.modern.js.map
