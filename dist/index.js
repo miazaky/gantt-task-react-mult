@@ -150,7 +150,7 @@ var ganttDateRange = function ganttDateRange(tasks, viewMode, preStepsCount) {
       newStartDate = startOfDate(newStartDate, "day");
       newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
       newEndDate = startOfDate(newEndDate, "day");
-      newEndDate = addToDate(newEndDate, 19, "day");
+      newEndDate = addToDate(newEndDate, 1, "day");
       break;
 
     case exports.ViewMode.QuarterDay:
