@@ -2584,6 +2584,15 @@ var Gantt = function Gantt(_ref) {
     }
   }, [wrapperRef, taskListWidth]);
   React.useEffect(function () {
+    var fullHeight = rowCount * rowHeight + headerHeight;
+    console.log("📏 HEIGHT DEBUG:", {
+      rowCount: rowCount,
+      rowHeight: rowHeight,
+      headerHeight: headerHeight,
+      computedFullHeight: fullHeight,
+      ganttHeightProp: ganttHeight
+    });
+
     if (ganttHeight) {
       setSvgContainerHeight(ganttHeight + headerHeight);
     } else {

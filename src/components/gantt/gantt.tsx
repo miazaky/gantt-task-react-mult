@@ -298,6 +298,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   }, [wrapperRef, taskListWidth]);
 
   useEffect(() => {
+    const fullHeight = rowCount * rowHeight + headerHeight;
+
+    console.log("📏 HEIGHT DEBUG:", {
+      rowCount,
+      rowHeight,
+      headerHeight,
+      computedFullHeight: fullHeight,
+      ganttHeightProp: ganttHeight,
+    });
     if (ganttHeight) {
       setSvgContainerHeight(ganttHeight + headerHeight);
     } else {
