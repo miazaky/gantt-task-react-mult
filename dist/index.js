@@ -101,7 +101,7 @@ var startOfDate = function startOfDate(date, scale) {
   var newDate = new Date(date.getFullYear(), shouldReset("year") ? 0 : date.getMonth(), shouldReset("month") ? 1 : date.getDate(), shouldReset("day") ? 0 : date.getHours(), shouldReset("hour") ? 0 : date.getMinutes(), shouldReset("minute") ? 0 : date.getSeconds(), shouldReset("second") ? 0 : date.getMilliseconds());
   return newDate;
 };
-var ganttDateRange = function ganttDateRange(tasks, viewMode) {
+var ganttDateRange = function ganttDateRange(tasks, viewMode, preStepsCount) {
   var newStartDate = tasks[0].start;
   var newEndDate = tasks[0].start;
 
@@ -119,43 +119,59 @@ var ganttDateRange = function ganttDateRange(tasks, viewMode) {
 
   switch (viewMode) {
     case exports.ViewMode.Year:
+      newStartDate = addToDate(newStartDate, -1, "year");
       newStartDate = startOfDate(newStartDate, "year");
+      newEndDate = addToDate(newEndDate, 1, "year");
       newEndDate = startOfDate(newEndDate, "year");
       break;
 
     case exports.ViewMode.QuarterYear:
+      newStartDate = addToDate(newStartDate, -3, "month");
       newStartDate = startOfDate(newStartDate, "month");
+      newEndDate = addToDate(newEndDate, 3, "year");
       newEndDate = startOfDate(newEndDate, "year");
       break;
 
     case exports.ViewMode.Month:
+      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "month");
       newStartDate = startOfDate(newStartDate, "month");
+      newEndDate = addToDate(newEndDate, 1, "year");
       newEndDate = startOfDate(newEndDate, "year");
       break;
 
     case exports.ViewMode.Week:
       newStartDate = startOfDate(newStartDate, "day");
+      newStartDate = addToDate(getMonday(newStartDate), -7 * preStepsCount, "day");
       newEndDate = startOfDate(newEndDate, "day");
+      newEndDate = addToDate(newEndDate, 1.5, "month");
       break;
 
     case exports.ViewMode.Day:
       newStartDate = startOfDate(newStartDate, "day");
+      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
       newEndDate = startOfDate(newEndDate, "day");
+      newEndDate = addToDate(newEndDate, 19, "day");
       break;
 
     case exports.ViewMode.QuarterDay:
       newStartDate = startOfDate(newStartDate, "day");
+      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
       newEndDate = startOfDate(newEndDate, "day");
+      newEndDate = addToDate(newEndDate, 66, "hour");
       break;
 
     case exports.ViewMode.HalfDay:
       newStartDate = startOfDate(newStartDate, "day");
+      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "day");
       newEndDate = startOfDate(newEndDate, "day");
+      newEndDate = addToDate(newEndDate, 108, "hour");
       break;
 
     case exports.ViewMode.Hour:
       newStartDate = startOfDate(newStartDate, "hour");
+      newStartDate = addToDate(newStartDate, -1 * preStepsCount, "hour");
       newEndDate = startOfDate(newEndDate, "day");
+      newEndDate = addToDate(newEndDate, 1, "day");
       break;
   }
 
@@ -219,6 +235,13 @@ var getLocalDayOfWeek = function getLocalDayOfWeek(date, locale, format) {
   bottomValue = bottomValue.replace(bottomValue[0], bottomValue[0].toLocaleUpperCase());
   return bottomValue;
 };
+
+var getMonday = function getMonday(date) {
+  var day = date.getDay();
+  var diff = date.getDate() - day + (day === 0 ? -6 : 1);
+  return new Date(date.setDate(diff));
+};
+
 var getWeekNumberISO8601 = function getWeekNumberISO8601(date) {
   var tmpDate = new Date(date.valueOf());
   var dayNumber = (tmpDate.getDay() + 6) % 7;
@@ -2298,6 +2321,8 @@ var Gantt = function Gantt(_ref) {
       ganttHeight = _ref$ganttHeight === void 0 ? 0 : _ref$ganttHeight,
       _ref$viewMode = _ref.viewMode,
       viewMode = _ref$viewMode === void 0 ? exports.ViewMode.Day : _ref$viewMode,
+      _ref$preStepsCount = _ref.preStepsCount,
+      preStepsCount = _ref$preStepsCount === void 0 ? 1 : _ref$preStepsCount,
       _ref$locale = _ref.locale,
       locale = _ref$locale === void 0 ? "en-GB" : _ref$locale,
       _ref$barFill = _ref.barFill,
@@ -2358,7 +2383,7 @@ var Gantt = function Gantt(_ref) {
   var taskListRef = React.useRef(null);
 
   var _useState = React.useState(function () {
-    var _ganttDateRange = ganttDateRange(tasks, viewMode),
+    var _ganttDateRange = ganttDateRange(tasks, viewMode, preStepsCount),
         startDate = _ganttDateRange[0],
         endDate = _ganttDateRange[1];
 
@@ -2452,7 +2477,7 @@ var Gantt = function Gantt(_ref) {
 
     filteredTasks = filteredTasks.sort(sortTasks);
 
-    var _ganttDateRange2 = ganttDateRange(filteredTasks, viewMode),
+    var _ganttDateRange2 = ganttDateRange(filteredTasks, viewMode, preStepsCount),
         startDate = _ganttDateRange2[0],
         endDate = _ganttDateRange2[1];
 
@@ -2491,7 +2516,7 @@ var Gantt = function Gantt(_ref) {
       });
     });
     setBarTasks(groupedBars);
-  }, [tasks, viewMode, rowHeight, barCornerRadius, columnWidth, taskHeight, handleWidth, barProgressColor, barProgressSelectedColor, barBackgroundColor, barBackgroundSelectedColor, projectProgressColor, projectProgressSelectedColor, projectBackgroundColor, projectBackgroundSelectedColor, milestoneBackgroundColor, milestoneBackgroundSelectedColor, rtl, scrollX, onExpanderClick]);
+  }, [tasks, viewMode, preStepsCount, rowHeight, barCornerRadius, columnWidth, taskHeight, handleWidth, barProgressColor, barProgressSelectedColor, barBackgroundColor, barBackgroundSelectedColor, projectProgressColor, projectProgressSelectedColor, projectBackgroundColor, projectBackgroundSelectedColor, milestoneBackgroundColor, milestoneBackgroundSelectedColor, rtl, scrollX, onExpanderClick]);
   React.useEffect(function () {
     if (viewMode === dateSetup.viewMode && (viewDate && !currentViewDate || viewDate && (currentViewDate === null || currentViewDate === void 0 ? void 0 : currentViewDate.valueOf()) !== viewDate.valueOf())) {
       var dates = dateSetup.dates;
