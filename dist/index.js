@@ -2431,18 +2431,31 @@ var Gantt = function Gantt(_ref) {
       setFailedTask = _useState8[1];
 
   var svgWidth = dateSetup.dates.length * columnWidth;
+  var baseRowCount = new Set(barTasks.map(function (t) {
+    var _t$name;
 
-  var _useState9 = React.useState(ganttHeight || new Array(new Set(barTasks.map(function (t) {
-    return t.name.trim().toLowerCase();
-  }))).length * rowHeight),
+    return ((_t$name = t.name) != null ? _t$name : "").trim().toLowerCase();
+  })).size;
+  var rowCount = rowCountOverride != null ? rowCountOverride : baseRowCount;
+  var ganttFullHeight = rowCount * rowHeight;
+  console.log("🔎 GANTT ROW DEBUG", {
+    barTasksCount: barTasks.length,
+    names: barTasks.map(function (t) {
+      return t.name;
+    }),
+    normalizedNames: barTasks.map(function (t) {
+      var _t$name2;
+
+      return ((_t$name2 = t.name) != null ? _t$name2 : "").trim().toLowerCase();
+    }),
+    baseRowCount: baseRowCount,
+    rowCount: rowCount,
+    ganttFullHeight: ganttFullHeight
+  });
+
+  var _useState9 = React.useState(ganttHeight || rowCount * rowHeight),
       svgContainerHeight = _useState9[0],
       setSvgContainerHeight = _useState9[1];
-
-  var uniqueRowCount = new Array(new Set(barTasks.map(function (t) {
-    return t.name.trim().toLowerCase();
-  }))).length;
-  var rowCount = uniqueRowCount;
-  var ganttFullHeight = rowCount * rowHeight;
 
   var _useState10 = React.useState(0),
       scrollY = _useState10[0],
@@ -2614,7 +2627,7 @@ var Gantt = function Gantt(_ref) {
     };
 
     (_wrapperRef$current = wrapperRef.current) === null || _wrapperRef$current === void 0 ? void 0 : _wrapperRef$current.addEventListener("wheel", handleWheel, {
-      passive: false
+      passive: true
     });
     return function () {
       var _wrapperRef$current2;

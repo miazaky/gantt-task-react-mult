@@ -104,12 +104,23 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   const [failedTask, setFailedTask] = useState<BarTask | null>(null);
 
   const svgWidth = dateSetup.dates.length * columnWidth;
-  const [svgContainerHeight, setSvgContainerHeight] = useState(
-    ganttHeight || (new Array(new Set(barTasks.map(t => t.name.trim().toLowerCase()))).length * rowHeight)
-  );
-  const uniqueRowCount = new Array(new Set(barTasks.map(t => t.name.trim().toLowerCase()))).length;
-  const rowCount = uniqueRowCount;
+  const baseRowCount = new Set(
+    barTasks.map(t => (t.name ?? "").trim().toLowerCase())
+  ).size;
+
+  const rowCount = rowCountOverride ?? baseRowCount;
   const ganttFullHeight = rowCount * rowHeight;
+  console.log("🔎 GANTT ROW DEBUG", {
+    barTasksCount: barTasks.length,
+    names: barTasks.map(t => t.name),
+    normalizedNames: barTasks.map(t => (t.name ?? "").trim().toLowerCase()),
+    baseRowCount,
+    rowCount,
+    ganttFullHeight,
+  });
+  const [svgContainerHeight, setSvgContainerHeight] = useState(
+    ganttHeight || (rowCount* rowHeight)
+  );
 
 
   const [scrollY, setScrollY] = useState(0);
@@ -331,7 +342,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
 
     // subscribe if scroll is necessary
     wrapperRef.current?.addEventListener("wheel", handleWheel, {
-      passive: false,
+      passive: true,
     });
     return () => {
       wrapperRef.current?.removeEventListener("wheel", handleWheel);
