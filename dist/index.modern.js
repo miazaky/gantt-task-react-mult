@@ -2434,9 +2434,9 @@ var Gantt = function Gantt(_ref) {
       setFailedTask = _useState9[1];
 
   var svgWidth = dateSetup.dates.length * columnWidth;
-  var uniqueRowCount = new Set(barTasks.map(function (t) {
+  var uniqueRowCount = new Array(new Set(barTasks.map(function (t) {
     return t.name.trim().toLowerCase();
-  })).size;
+  }))).length;
   var rowCount = uniqueRowCount;
   var ganttFullHeight = rowCount * rowHeight;
 
