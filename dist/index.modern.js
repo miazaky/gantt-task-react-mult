@@ -2501,12 +2501,12 @@ var Gantt = function Gantt(_ref) {
     var groupedBars = rawBars.map(function (bar) {
       var _bar$name;
 
-      var name = (_bar$name = bar.name) != null ? _bar$name : "";
-      var rowIndex = rowMap.get(name);
+      var rowKey = ((_bar$name = bar.name) != null ? _bar$name : "").trim().toLowerCase();
+      var rowIndex = rowMap.get(rowKey);
 
       if (rowIndex === undefined) {
         rowIndex = nextRow++;
-        rowMap.set(name, rowIndex);
+        rowMap.set(rowKey, rowIndex);
       }
 
       var newY = rowIndex * rowHeight + (rowHeight - taskHeight) / 2;

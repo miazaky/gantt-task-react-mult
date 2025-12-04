@@ -160,12 +160,12 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     let nextRow = 0;
 
     const groupedBars: BarTask[] = rawBars.map((bar) => {
-      const name = bar.name ?? "";
+      const rowKey = (bar.name ?? "").trim().toLowerCase();
 
-      let rowIndex = rowMap.get(name);
+      let rowIndex = rowMap.get(rowKey);
       if (rowIndex === undefined) {
         rowIndex = nextRow++;
-        rowMap.set(name, rowIndex);
+        rowMap.set(rowKey, rowIndex);
       }
 
       const newY = rowIndex * rowHeight + (rowHeight - taskHeight) / 2;
