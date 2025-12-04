@@ -2399,6 +2399,8 @@ var Gantt = function Gantt(_ref) {
       currentViewDate = _useState2[0],
       setCurrentViewDate = _useState2[1];
 
+  var svgRef = useRef(null);
+
   var _useState3 = useState(0),
       taskListWidth = _useState3[0],
       setTaskListWidth = _useState3[1];
@@ -2520,6 +2522,13 @@ var Gantt = function Gantt(_ref) {
     setBarTasks(groupedBars);
   }, [tasks, rowCountOverride, viewMode, preStepsCount, rowHeight, barCornerRadius, columnWidth, taskHeight, handleWidth, barProgressColor, barProgressSelectedColor, barBackgroundColor, barBackgroundSelectedColor, projectProgressColor, projectProgressSelectedColor, projectBackgroundColor, projectBackgroundSelectedColor, milestoneBackgroundColor, milestoneBackgroundSelectedColor, rtl, scrollX, onExpanderClick]);
   useEffect(function () {
+    if (svgRef.current) {
+      var height = svgRef.current.clientHeight;
+      console.log("REAL SVG HEIGHT:", height);
+      setSvgContainerHeight(height);
+    }
+  }, [wrapperRef, taskListWidth]);
+  useEffect(function () {
     if (viewMode === dateSetup.viewMode && (viewDate && !currentViewDate || viewDate && (currentViewDate === null || currentViewDate === void 0 ? void 0 : currentViewDate.valueOf()) !== viewDate.valueOf())) {
       var dates = dateSetup.dates;
       var index = dates.findIndex(function (d, i) {
@@ -2582,22 +2591,6 @@ var Gantt = function Gantt(_ref) {
       setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
     }
   }, [wrapperRef, taskListWidth]);
-  useEffect(function () {
-    var fullHeight = rowCount * rowHeight + headerHeight;
-    console.log("📏 HEIGHT DEBUG:", {
-      rowCount: rowCount,
-      rowHeight: rowHeight,
-      headerHeight: headerHeight,
-      computedFullHeight: fullHeight,
-      ganttHeightProp: ganttHeight
-    });
-
-    if (ganttHeight) {
-      setSvgContainerHeight(ganttHeight + headerHeight);
-    } else {
-      setSvgContainerHeight(rowCount * rowHeight + headerHeight);
-    }
-  }, [ganttHeight, headerHeight, rowHeight, rowCount]);
   useEffect(function () {
     var _wrapperRef$current;
 
@@ -2814,10 +2807,10 @@ var Gantt = function Gantt(_ref) {
     TaskListTable: TaskListTable
   };
   return React.createElement("div", null, React.createElement("div", {
-    className: styles$9.wrapper,
+    className: styles$9.ganttContainer,
     onKeyDown: handleKeyDown,
     tabIndex: 0,
-    ref: wrapperRef
+    ref: svgRef
   }, listCellWidth && React.createElement(TaskList, Object.assign({}, tableProps)), React.createElement(TaskGantt, {
     gridProps: gridProps,
     calendarProps: calendarProps,

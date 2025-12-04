@@ -77,6 +77,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     undefined
   );
 
+  const svgRef = useRef<HTMLDivElement>(null);
   const [taskListWidth, setTaskListWidth] = useState(0);
   const [svgContainerWidth, setSvgContainerWidth] = useState(0);
   const [barTasks, setBarTasks] = useState<BarTask[]>([]);
@@ -218,6 +219,15 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   ]);
 
   useEffect(() => {
+    if (svgRef.current) {
+      const height = svgRef.current.clientHeight;
+      console.log("REAL SVG HEIGHT:", height);
+      setSvgContainerHeight(height);
+    }
+  }, [wrapperRef, taskListWidth]);
+
+
+  useEffect(() => {
     if (
       viewMode === dateSetup.viewMode &&
       ((viewDate && !currentViewDate) ||
@@ -297,22 +307,22 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
   }, [wrapperRef, taskListWidth]);
 
-  useEffect(() => {
-    const fullHeight = rowCount * rowHeight + headerHeight;
+  // useEffect(() => {
+  //   const fullHeight = rowCount * rowHeight + headerHeight;
 
-    console.log("📏 HEIGHT DEBUG:", {
-      rowCount,
-      rowHeight,
-      headerHeight,
-      computedFullHeight: fullHeight,
-      ganttHeightProp: ganttHeight,
-    });
-    if (ganttHeight) {
-      setSvgContainerHeight(ganttHeight + headerHeight);
-    } else {
-      setSvgContainerHeight(rowCount * rowHeight + headerHeight);
-    }
-  }, [ganttHeight, headerHeight, rowHeight, rowCount]);
+  //   console.log("📏 HEIGHT DEBUG:", {
+  //     rowCount,
+  //     rowHeight,
+  //     headerHeight,
+  //     computedFullHeight: fullHeight,
+  //     ganttHeightProp: ganttHeight,
+  //   });
+  //   if (ganttHeight) {
+  //     setSvgContainerHeight(ganttHeight + headerHeight);
+  //   } else {
+  //     setSvgContainerHeight(rowCount * rowHeight + headerHeight);
+  //   }
+  // }, [ganttHeight, headerHeight, rowHeight, rowCount]);
 
 
   // scroll events
@@ -535,10 +545,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   return (
     <div>
       <div
-        className={styles.wrapper}
+        className={styles.ganttContainer}
         onKeyDown={handleKeyDown}
         tabIndex={0}
-        ref={wrapperRef}
+        ref={svgRef}
       >
         {listCellWidth && <TaskList {...tableProps} />}
         <TaskGantt
