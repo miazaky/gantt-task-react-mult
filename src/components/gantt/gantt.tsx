@@ -118,9 +118,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     rowCount,
     ganttFullHeight,
   });
-  const [svgContainerHeight, setSvgContainerHeight] = useState(
-    ganttHeight || rowHeight
-  );
+  const [svgContainerHeight, setSvgContainerHeight] = useState(0);
 
 
   const [scrollY, setScrollY] = useState(0);
@@ -216,6 +214,20 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     scrollX,
     onExpanderClick,
   ]);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      if (wrapperRef.current) {
+        const h = wrapperRef.current.clientHeight;
+        setSvgContainerHeight(h);
+        console.log("REAL VISIBLE HEIGHT:", h);
+      }
+    };
+
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
 
   useEffect(() => {
     if (
@@ -352,9 +364,10 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   ]);
 
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
-    const fullHeight = ganttFullHeight;
-    const visibleHeight = ganttHeight || (svgContainerHeight - headerHeight);
-    const maxScrollY = Math.max(0, fullHeight - visibleHeight);
+    const fullHeight = ganttFullHeight;               // total content height
+    const maxVisible = svgContainerHeight;                 // real visible area
+
+    const maxScrollY = Math.max(0, fullHeight - maxVisible);
 
     let newScrollY = event.currentTarget.scrollTop;
     newScrollY = Math.max(0, Math.min(newScrollY, maxScrollY));
@@ -366,6 +379,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       setIgnoreScrollEvent(false);
     }
   };
+
 
   const handleScrollX = (event: SyntheticEvent<HTMLDivElement>) => {
     if (scrollX !== event.currentTarget.scrollLeft && !ignoreScrollEvent) {

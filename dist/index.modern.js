@@ -2452,7 +2452,7 @@ var Gantt = function Gantt(_ref) {
     ganttFullHeight: ganttFullHeight
   });
 
-  var _useState9 = useState(ganttHeight || rowHeight),
+  var _useState9 = useState(0),
       svgContainerHeight = _useState9[0],
       setSvgContainerHeight = _useState9[1];
 
@@ -2519,6 +2519,21 @@ var Gantt = function Gantt(_ref) {
     });
     setBarTasks(groupedBars);
   }, [tasks, rowCountOverride, viewMode, preStepsCount, rowHeight, barCornerRadius, columnWidth, taskHeight, handleWidth, barProgressColor, barProgressSelectedColor, barBackgroundColor, barBackgroundSelectedColor, projectProgressColor, projectProgressSelectedColor, projectBackgroundColor, projectBackgroundSelectedColor, milestoneBackgroundColor, milestoneBackgroundSelectedColor, rtl, scrollX, onExpanderClick]);
+  useEffect(function () {
+    var updateHeight = function updateHeight() {
+      if (wrapperRef.current) {
+        var h = wrapperRef.current.clientHeight;
+        setSvgContainerHeight(h);
+        console.log("REAL VISIBLE HEIGHT:", h);
+      }
+    };
+
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
+    return function () {
+      return window.removeEventListener("resize", updateHeight);
+    };
+  }, []);
   useEffect(function () {
     if (viewMode === dateSetup.viewMode && (viewDate && !currentViewDate || viewDate && (currentViewDate === null || currentViewDate === void 0 ? void 0 : currentViewDate.valueOf()) !== viewDate.valueOf())) {
       var dates = dateSetup.dates;
@@ -2627,8 +2642,8 @@ var Gantt = function Gantt(_ref) {
 
   var handleScrollY = function handleScrollY(event) {
     var fullHeight = ganttFullHeight;
-    var visibleHeight = ganttHeight || svgContainerHeight - headerHeight;
-    var maxScrollY = Math.max(0, fullHeight - visibleHeight);
+    var maxVisible = svgContainerHeight;
+    var maxScrollY = Math.max(0, fullHeight - maxVisible);
     var newScrollY = event.currentTarget.scrollTop;
     newScrollY = Math.max(0, Math.min(newScrollY, maxScrollY));
 
