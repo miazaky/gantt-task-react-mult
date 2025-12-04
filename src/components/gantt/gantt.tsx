@@ -109,7 +109,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   ).size;
 
   const rowCount = rowCountOverride ?? baseRowCount;
-  const ganttFullHeight = rowCount * rowHeight;
+  const ganttFullHeight = rowCount * rowHeight + headerHeight;
   console.log("🔎 GANTT ROW DEBUG", {
     barTasksCount: barTasks.length,
     names: barTasks.map(t => t.name),
@@ -361,6 +361,17 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
   ]);
 
   const handleScrollY = (event: SyntheticEvent<HTMLDivElement>) => {
+    console.log("🧪 SCROLL DEBUG", {
+      fullHeight: ganttFullHeight,
+      visibleHeight: ganttHeight || (svgContainerHeight - headerHeight),
+      svgContainerHeight,
+      ganttHeightProp: ganttHeight,
+      headerHeight,
+      maxScrollY: Math.max(0, ganttFullHeight - (ganttHeight || (svgContainerHeight - headerHeight))),
+      barTasksCount: barTasks.length,
+      rowCount,
+    });
+
     const fullHeight = ganttFullHeight;
     const visibleHeight = ganttHeight || (svgContainerHeight - headerHeight);
     const maxScrollY = Math.max(0, fullHeight - visibleHeight);

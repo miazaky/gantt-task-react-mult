@@ -2436,7 +2436,7 @@ var Gantt = function Gantt(_ref) {
     return ((_t$name = t.name) != null ? _t$name : "").trim().toLowerCase();
   })).size;
   var rowCount = rowCountOverride != null ? rowCountOverride : baseRowCount;
-  var ganttFullHeight = rowCount * rowHeight;
+  var ganttFullHeight = rowCount * rowHeight + headerHeight;
   console.log("🔎 GANTT ROW DEBUG", {
     barTasksCount: barTasks.length,
     names: barTasks.map(function (t) {
@@ -2635,6 +2635,16 @@ var Gantt = function Gantt(_ref) {
   }, [wrapperRef, scrollY, scrollX, ganttHeight, svgWidth, rtl, ganttFullHeight, svgContainerHeight, rowCountOverride]);
 
   var handleScrollY = function handleScrollY(event) {
+    console.log("🧪 SCROLL DEBUG", {
+      fullHeight: ganttFullHeight,
+      visibleHeight: ganttHeight || svgContainerHeight - headerHeight,
+      svgContainerHeight: svgContainerHeight,
+      ganttHeightProp: ganttHeight,
+      headerHeight: headerHeight,
+      maxScrollY: Math.max(0, ganttFullHeight - (ganttHeight || svgContainerHeight - headerHeight)),
+      barTasksCount: barTasks.length,
+      rowCount: rowCount
+    });
     var fullHeight = ganttFullHeight;
     var visibleHeight = ganttHeight || svgContainerHeight - headerHeight;
     var maxScrollY = Math.max(0, fullHeight - visibleHeight);
