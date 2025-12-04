@@ -23,48 +23,49 @@ export const convertToBarTasks = (
   milestoneBackgroundSelectedColor: string
 ) => {
 
-  const rowIndexByName = new Map<string, number>();
-  let rowCounter = 0;
+  const grouped = Object.values(
+    tasks.reduce((acc, t) => {
+      const key = t.name ?? "";
+      if (!acc[key]) acc[key] = [];
+      acc[key].push(t);
+      return acc;
+    }, {} as Record<string, Task[]>)
+  );
 
-  for (const t of tasks) {
-    const nameKey = t.name ?? "";
-    if (!rowIndexByName.has(nameKey)) {
-      rowIndexByName.set(nameKey, rowCounter);
-      rowCounter++;
-    }
-  }
-  let barTasks = tasks.map((t) => {
-    const rowIndex = rowIndexByName.get(t.name ?? "") ?? 0;
+  let barTasks: BarTask[] = [];
 
-    return convertToBarTask(
-      t,
-      rowIndex,
-      dates,
-      columnWidth,
-      rowHeight,
-      taskHeight,
-      barCornerRadius,
-      handleWidth,
-      rtl,
-      barProgressColor,
-      barProgressSelectedColor,
-      barBackgroundColor,
-      barBackgroundSelectedColor,
-      projectProgressColor,
-      projectProgressSelectedColor,
-      projectBackgroundColor,
-      projectBackgroundSelectedColor,
-      milestoneBackgroundColor,
-      milestoneBackgroundSelectedColor
-    );
+  grouped.forEach((employeeTasks, rowIndex) => {
+    employeeTasks.forEach((t) => {
+      const bar = convertToBarTask(
+        t,
+        rowIndex,
+        dates,
+        columnWidth,
+        rowHeight,
+        taskHeight,
+        barCornerRadius,
+        handleWidth,
+        rtl,
+        barProgressColor,
+        barProgressSelectedColor,
+        barBackgroundColor,
+        barBackgroundSelectedColor,
+        projectProgressColor,
+        projectProgressSelectedColor,
+        projectBackgroundColor,
+        projectBackgroundSelectedColor,
+        milestoneBackgroundColor,
+        milestoneBackgroundSelectedColor
+      );
+
+      barTasks.push(bar);
+    });
   });
 
   barTasks = barTasks.map(task => {
     const dependencies = task.dependencies || [];
     for (let j = 0; j < dependencies.length; j++) {
-      const dependence = barTasks.findIndex(
-        value => value.id === dependencies[j]
-      );
+      const dependence = barTasks.findIndex(value => value.id === dependencies[j]);
       if (dependence !== -1) barTasks[dependence].barChildren.push(task);
     }
     return task;
@@ -72,6 +73,7 @@ export const convertToBarTasks = (
 
   return barTasks;
 };
+
 
 const convertToBarTask = (
   task: Task,
