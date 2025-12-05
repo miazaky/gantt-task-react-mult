@@ -26,6 +26,7 @@ export const VerticalScroll: React.FC<{
 
   return (
     <div
+      dir="rtr"
       style={{
         height: ganttHeight,
         marginTop: headerHeight,

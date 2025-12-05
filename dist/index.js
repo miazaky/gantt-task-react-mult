@@ -532,6 +532,7 @@ var VerticalScroll = function VerticalScroll(_ref) {
     }
   }, [scroll]);
   return React__default.createElement("div", {
+    dir: "rtr",
     style: {
       height: ganttHeight,
       marginTop: headerHeight,
