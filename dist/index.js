@@ -516,7 +516,7 @@ var StandardTooltipContent = function StandardTooltipContent(_ref2) {
   }, !!task.progress && "Progress: " + task.progress + " %"));
 };
 
-var styles$3 = {"scrollWrapper":"_3EkEz","scroll":"_1eT-t"};
+var styles$3 = {"scroll":"_1eT-t"};
 
 var VerticalScroll = function VerticalScroll(_ref) {
   var scroll = _ref.scroll,
@@ -529,16 +529,15 @@ var VerticalScroll = function VerticalScroll(_ref) {
   React.useEffect(function () {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scroll;
-      console.log(rtl);
     }
   }, [scroll]);
   return React__default.createElement("div", {
-    className: styles$3.scrollWrapper,
+    dir: "rtr",
     style: {
       height: ganttHeight,
-      top: headerHeight
-    }
-  }, React__default.createElement("div", {
+      marginTop: headerHeight,
+      marginLeft: rtl ? "" : "-1rem"
+    },
     className: styles$3.scroll,
     onScroll: onScroll,
     ref: scrollRef
@@ -547,7 +546,7 @@ var VerticalScroll = function VerticalScroll(_ref) {
       height: ganttFullHeight,
       width: 1
     }
-  })));
+  }));
 };
 
 var TaskList = function TaskList(_ref) {

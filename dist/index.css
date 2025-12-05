@@ -98,24 +98,16 @@
   pointer-events: none;
 }
 
-._3EkEz {
-  position: absolute;
-  right: -20px;      /* pushes scrollbar OUTSIDE the Gantt view */
-  width: 20px;       /* enough room for thumb */
-  overflow: visible; /* allow scrollbar to escape the container */
-  z-index: 20;
-}
-
 ._1eT-t {
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 100%;
-  width: 100%;
+  overflow: hidden auto;
+  width: 1rem;
+  flex-shrink: 0;
+  /*firefox*/
   scrollbar-width: thin;
 }
-
 ._1eT-t::-webkit-scrollbar {
-  width: 12px;
+  width: 1.1rem;
+  height: 1.1rem;
 }
 ._1eT-t::-webkit-scrollbar-corner {
   background: transparent;
@@ -133,7 +125,6 @@
   background: var(--palette-black-alpha-30, rgba(0, 0, 0, 0.3));
   background-clip: padding-box;
 }
-
 ._2dZTy {
   fill: #fff;
 }

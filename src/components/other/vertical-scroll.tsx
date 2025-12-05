@@ -21,25 +21,22 @@ export const VerticalScroll: React.FC<{
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scroll;
-      console.log(rtl)
     }
   }, [scroll]);
 
   return (
     <div
-      className={styles.scrollWrapper}
+      dir="rtr"
       style={{
         height: ganttHeight,
-        top: headerHeight,
+        marginTop: headerHeight,
+        marginLeft: rtl ? "" : "-1rem",
       }}
+      className={styles.scroll}
+      onScroll={onScroll}
+      ref={scrollRef}
     >
-      <div
-        className={styles.scroll}
-        onScroll={onScroll}
-        ref={scrollRef}
-      >
-        <div style={{ height: ganttFullHeight, width: 1 }} />
-      </div>
+      <div style={{ height: ganttFullHeight, width: 1 }} />
     </div>
   );
 };
