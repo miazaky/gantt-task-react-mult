@@ -302,14 +302,14 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     }
   }, [wrapperRef, taskListWidth]);
 
-  console.log("wrapperRef size", wrapperRef.current?.clientHeight)
+  // console.log("wrapperRef size", wrapperRef.current?.clientHeight)
 
   useEffect(() => {
     if (ganttHeight) {
       setSvgContainerHeight(ganttHeight + headerHeight);
     } else {
       setSvgContainerHeight(rowCount * rowHeight + headerHeight);
-      console.log("SETTING CONTAINER HEIGHT:", rowCount * rowHeight + headerHeight);
+      // console.log("SETTING CONTAINER HEIGHT:", rowCount * rowHeight + headerHeight);
     }
   }, [ganttHeight, headerHeight, rowHeight, rowCount]);
 
@@ -374,23 +374,20 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
     if (!el) return;
 
     const handleWheel = (event: WheelEvent) => {
-      // only react if the wheel is inside the gantt wrapper
       if (!wrapperRef.current || !wrapperRef.current.contains(event.target as Node)) {
         return;
       }
 
-      const fullHeight = contentHeight; // = ganttFullHeight
+      const fullHeight = contentHeight;
       const visibleHeight = (ganttHeight || wrapperRef.current.clientHeight) - headerHeight;
       const maxScrollY = Math.max(0, fullHeight - visibleHeight);
 
-      // horizontal scroll (Shift or strong horizontal movement)
       if (event.shiftKey || Math.abs(event.deltaX) > Math.abs(event.deltaY)) {
         const scrollMove = event.deltaX || event.deltaY;
         setScrollX(prev =>
           Math.max(0, Math.min(prev + scrollMove, svgWidth))
         );
       } else {
-        // vertical scroll
         if (maxScrollY > 0) {
           setScrollY(prev => {
             const next = Math.max(0, Math.min(prev + event.deltaY, maxScrollY));
@@ -399,13 +396,11 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         }
       }
 
-      // always stop native scrolling; page can't scroll anyway, but this
-      // keeps touchpad inertia from doing weird things
       event.preventDefault();
       setIgnoreScrollEvent(true);
     };
 
-    el.addEventListener("wheel", handleWheel, { passive: false });
+    el.addEventListener("wheel", handleWheel, { passive: true });
     return () => el.removeEventListener("wheel", handleWheel);
   }, [ganttHeight, contentHeight, svgWidth, headerHeight]);
 
@@ -493,7 +488,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         const fullHeight = ganttFullHeight;
         const visibleHeight = ganttHeight || (svgContainerHeight - headerHeight);
         const maxScrollY = Math.max(0, fullHeight - visibleHeight);
-        console.log("KEYDOWN SCROLL:", { newScrollY, scrollY, maxScrollY });
+        // console.log("KEYDOWN SCROLL:", { newScrollY, scrollY, maxScrollY });
 
         if (newScrollY < 0) {
           newScrollY = 0;
@@ -599,10 +594,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         tabIndex={0}
         ref={wrapperRef}
       >
-        <div 
-          style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 99999 }}
-          onWheel={() => console.log("💥 wrapper WHEEL overlay fired")}
-        />
         {listCellWidth && <TaskList {...tableProps} />}
         <TaskGantt
           gridProps={gridProps}

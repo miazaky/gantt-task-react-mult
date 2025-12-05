@@ -2307,8 +2307,6 @@ var HorizontalScroll = function HorizontalScroll(_ref) {
 };
 
 var Gantt = function Gantt(_ref) {
-  var _wrapperRef$current;
-
   var tasks = _ref.tasks,
       rowCountOverride = _ref.rowCountOverride,
       _ref$headerHeight = _ref.headerHeight,
@@ -2571,13 +2569,11 @@ var Gantt = function Gantt(_ref) {
       setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
     }
   }, [wrapperRef, taskListWidth]);
-  console.log("wrapperRef size", (_wrapperRef$current = wrapperRef.current) === null || _wrapperRef$current === void 0 ? void 0 : _wrapperRef$current.clientHeight);
   useEffect(function () {
     if (ganttHeight) {
       setSvgContainerHeight(ganttHeight + headerHeight);
     } else {
       setSvgContainerHeight(rowCount * rowHeight + headerHeight);
-      console.log("SETTING CONTAINER HEIGHT:", rowCount * rowHeight + headerHeight);
     }
   }, [ganttHeight, headerHeight, rowHeight, rowCount]);
   useEffect(function () {
@@ -2612,7 +2608,7 @@ var Gantt = function Gantt(_ref) {
     };
 
     el.addEventListener("wheel", handleWheel, {
-      passive: false
+      passive: true
     });
     return function () {
       return el.removeEventListener("wheel", handleWheel);
@@ -2686,11 +2682,6 @@ var Gantt = function Gantt(_ref) {
       var fullHeight = ganttFullHeight;
       var visibleHeight = ganttHeight || svgContainerHeight - headerHeight;
       var maxScrollY = Math.max(0, fullHeight - visibleHeight);
-      console.log("KEYDOWN SCROLL:", {
-        newScrollY: newScrollY,
-        scrollY: scrollY,
-        maxScrollY: maxScrollY
-      });
 
       if (newScrollY < 0) {
         newScrollY = 0;
@@ -2799,17 +2790,7 @@ var Gantt = function Gantt(_ref) {
     onKeyDown: handleKeyDown,
     tabIndex: 0,
     ref: wrapperRef
-  }, React.createElement("div", {
-    style: {
-      position: "absolute",
-      inset: 0,
-      pointerEvents: "none",
-      zIndex: 99999
-    },
-    onWheel: function onWheel() {
-      return console.log("💥 wrapper WHEEL overlay fired");
-    }
-  }), listCellWidth && React.createElement(TaskList, Object.assign({}, tableProps)), React.createElement(TaskGantt, {
+  }, listCellWidth && React.createElement(TaskList, Object.assign({}, tableProps)), React.createElement(TaskGantt, {
     gridProps: gridProps,
     calendarProps: calendarProps,
     barProps: barProps,
