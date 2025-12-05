@@ -2603,7 +2603,6 @@ var Gantt = function Gantt(_ref) {
         }
       }
 
-      event.preventDefault();
       setIgnoreScrollEvent(true);
     };
 

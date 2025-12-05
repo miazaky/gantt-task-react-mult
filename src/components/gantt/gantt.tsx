@@ -396,7 +396,6 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
         }
       }
 
-      event.preventDefault();
       setIgnoreScrollEvent(true);
     };
 
