@@ -275,6 +275,10 @@
   list-style: none;
   outline: none;
   position: relative;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  flex-shrink: 1; 
 }
 
 ._2k9Ys {
