@@ -181,7 +181,7 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       }
 
       const newY = rowIndex * rowHeight + (rowHeight - taskHeight) / 2;
-      console.log("BAR POSITION:", { barName: bar.name, rowKey, rowIndex, newY });
+      // console.log("BAR POSITION:", { barName: bar.name, rowKey, rowIndex, newY });
 
       return {
         ...bar,
@@ -295,6 +295,8 @@ export const Gantt: React.FunctionComponent<GanttProps> = ({
       setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
     }
   }, [wrapperRef, taskListWidth]);
+
+  console.log("wrapperRef size", wrapperRef.current?.clientHeight)
 
   useEffect(() => {
     if (ganttHeight) {

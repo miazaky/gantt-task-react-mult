@@ -2308,6 +2308,8 @@ var HorizontalScroll = function HorizontalScroll(_ref) {
 };
 
 var Gantt = function Gantt(_ref) {
+  var _wrapperRef$current;
+
   var tasks = _ref.tasks,
       rowCountOverride = _ref.rowCountOverride,
       _ref$headerHeight = _ref.headerHeight,
@@ -2497,12 +2499,6 @@ var Gantt = function Gantt(_ref) {
       }
 
       var newY = rowIndex * rowHeight + (rowHeight - taskHeight) / 2;
-      console.log("BAR POSITION:", {
-        barName: bar.name,
-        rowKey: rowKey,
-        rowIndex: rowIndex,
-        newY: newY
-      });
       return _extends({}, bar, {
         index: rowIndex,
         y: newY
@@ -2573,6 +2569,7 @@ var Gantt = function Gantt(_ref) {
       setSvgContainerWidth(wrapperRef.current.offsetWidth - taskListWidth);
     }
   }, [wrapperRef, taskListWidth]);
+  console.log("wrapperRef size", (_wrapperRef$current = wrapperRef.current) === null || _wrapperRef$current === void 0 ? void 0 : _wrapperRef$current.clientHeight);
   React.useEffect(function () {
     if (ganttHeight) {
       setSvgContainerHeight(ganttHeight + headerHeight);
@@ -2582,7 +2579,7 @@ var Gantt = function Gantt(_ref) {
     }
   }, [ganttHeight, headerHeight, rowHeight, rowCount]);
   React.useEffect(function () {
-    var _wrapperRef$current;
+    var _wrapperRef$current2;
 
     var handleWheel = function handleWheel(event) {
       if (event.shiftKey || event.deltaX) {
@@ -2612,13 +2609,13 @@ var Gantt = function Gantt(_ref) {
       setIgnoreScrollEvent(true);
     };
 
-    (_wrapperRef$current = wrapperRef.current) === null || _wrapperRef$current === void 0 ? void 0 : _wrapperRef$current.addEventListener("wheel", handleWheel, {
+    (_wrapperRef$current2 = wrapperRef.current) === null || _wrapperRef$current2 === void 0 ? void 0 : _wrapperRef$current2.addEventListener("wheel", handleWheel, {
       passive: false
     });
     return function () {
-      var _wrapperRef$current2;
+      var _wrapperRef$current3;
 
-      (_wrapperRef$current2 = wrapperRef.current) === null || _wrapperRef$current2 === void 0 ? void 0 : _wrapperRef$current2.removeEventListener("wheel", handleWheel);
+      (_wrapperRef$current3 = wrapperRef.current) === null || _wrapperRef$current3 === void 0 ? void 0 : _wrapperRef$current3.removeEventListener("wheel", handleWheel);
     };
   }, [wrapperRef, scrollY, scrollX, ganttHeight, svgWidth, rtl, ganttFullHeight, svgContainerHeight, rowCountOverride]);
 
