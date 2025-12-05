@@ -98,16 +98,24 @@
   pointer-events: none;
 }
 
+._3EkEz {
+  position: absolute;
+  right: -20px;      /* pushes scrollbar OUTSIDE the Gantt view */
+  width: 20px;       /* enough room for thumb */
+  overflow: visible; /* allow scrollbar to escape the container */
+  z-index: 20;
+}
+
 ._1eT-t {
-  overflow: hidden auto;
-  width: 1rem;
-  flex-shrink: 0;
-  /*firefox*/
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100%;
+  width: 100%;
   scrollbar-width: thin;
 }
+
 ._1eT-t::-webkit-scrollbar {
-  width: 1.1rem;
-  height: 1.1rem;
+  width: 12px;
 }
 ._1eT-t::-webkit-scrollbar-corner {
   background: transparent;
