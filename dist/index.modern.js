@@ -535,7 +535,7 @@ var VerticalScroll = function VerticalScroll(_ref) {
     style: {
       height: ganttHeight,
       marginTop: headerHeight,
-      marginLeft: rtl ? "" : "-1rem"
+      marginLeft: rtl ? "" : "-0.4rem"
     },
     className: styles$3.scroll,
     onScroll: onScroll,
