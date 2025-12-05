@@ -256,7 +256,8 @@
 }
 
 ._CZjuD {
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
   font-size: 0;
   margin: 0;
   padding: 0;
@@ -265,7 +266,8 @@
 ._2B2zv {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 ._3eULf {
